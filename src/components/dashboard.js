@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import Userfront from "@userfront/react";
 import User from "./user";
 import PropTypes from 'prop-types';
@@ -36,3 +37,12 @@ Dashboard.propTypes =  {
 };
 
 export default Dashboard;
+=======
+const Dashboard = () => (
+    <div>
+        <h2>Dashboard</h2>
+    </div>
+)
+
+export default Dashboard;
+>>>>>>> 21b790f73fb4b713f5445f9f6f42545cf41ee23f
