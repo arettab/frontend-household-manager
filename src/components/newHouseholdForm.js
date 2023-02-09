@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NewInviteForm from './InviteForm';
+import { Link } from 'react-router-dom';
 
 const defaultHouseholdState = {
     household: "",
@@ -28,8 +28,11 @@ const NewHouseholdForm = ({handleHouseholdSubmit})=> {
                 <label htmlFor="household"> Name Your Household</label>
                 <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
             </div>
-            <div><input type="submit" value="Add Household" /></div>
-
+            <div>
+                <Link to=".." relative="path">
+                <button type="submit" value="Add Household">Start a Household</button>
+                </Link>
+            </div>
         </form>
     )
 }

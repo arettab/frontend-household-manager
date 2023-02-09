@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 const defaultInviteState = {
     email: "",
@@ -22,14 +23,24 @@ const NewInviteForm = ({handleInviteSubmit})=> {
     }
 
     return (
+        <div>
         <form onSubmit={handleSubmit}>
             <div>
                 <label htmlFor="email">new member's email</label>
-                <input type="text" id="email" name="emaail" value={formData.email} onChange={handleChange} />
+                <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} />
+            </div>
+            <div>
+                <label htmlFor="name">new member's name</label>
+                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
             </div>
             <div><input type="submit" value="Send Invite" /></div>
         </form>
+        <Link to="/dashboard">
+            <button>Finished</button>
+        </Link> 
+        </div>
+
     )
-}
+}   
 
 export default NewInviteForm;

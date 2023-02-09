@@ -2,32 +2,42 @@ import Userfront from "@userfront/react";
 import User from "./user";
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { IconButton } from "@mui/material";
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import Topbar from "./topbar";
 
 const Dashboard = (props) => {
-    if (!props.data || !props.data.household) {
-        return (
+    return (
         <div>
-            <h2>
-            It looks like you have not been added to a household. Would you like to start one?
-            </h2>
-            <div>
-        <Link to="/addHouse">
-        <button>Start a Household</button>
-        </Link>
-    </div>
-            <button onClick={Userfront.logout}>Logout</button>
+            <Topbar />
+            {!props.userData || !props.userData.tenantId || props.userData.tenantId !== 'vbqvm99n' ? (
+                <div>
+                    <h2>
+                        It looks like you have not been added to a household. Would you like to start one?
+                    </h2>
+                    <div>
+                        <Link to="/addHouse">
+                            <IconButton type="button">
+                                <GroupAddIcon />
+                            </IconButton>
+                        </Link>
+                    </div>
+                    <button onClick={Userfront.logout}>Logout</button>
+                </div>
+            ) : (
+                <div>
+                    <h2>Dashboard</h2>
+                    <User name={props.userData.name} />
+                    <Link to='/invite'>
+                        <button>Invite Household Members</button>
+                    </Link>
+                    <button onClick={Userfront.logout}>Logout</button>
+                </div>
+            )}
         </div>
     );
-    } else {
-        return (
-        <div>
-            <h2>Dashboard</h2>
-            <User name={props.name} email={props.email} />
-            <button onClick={Userfront.logout}>Logout</button>
-        </div>
-        );
-    }
 };
+
 
 
 Dashboard.propTypes =  {

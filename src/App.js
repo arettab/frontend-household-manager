@@ -1,4 +1,3 @@
-// import logo from './logo.svg';
 import {
   BrowserRouter as Router,
   Routes,
@@ -13,11 +12,13 @@ import SignupForm from './components/signupForm';
 import Dashboard from './components/dashboard';
 import PasswordResetForm from './components/passwordResetForm';
 import Userfront from "@userfront/react";
+import NewHouseholdForm from './components/newHouseholdForm';
 
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import NewHouseholdForm from './components/newHouseholdForm';
+import NewInviteForm from './components/NewInviteForm';
+
 
 
 
@@ -32,13 +33,30 @@ function RequireAuth({ children }) {
 
   return children;
 }
+  
 
-const convertFromApi = (apiHousehold) => {
-  const {name,...rest} = apiHousehold;
+const addNewHouseholdApi = (householdData) => {
+  const requestBody = {...householdData};
 
-  const newHousehold = {name, ...rest}
-  return newHousehold
-}
+  return axios.post(`${backendUrl}/households`, requestBody)
+  .then (response => {
+    return response;
+  })
+  .catch(error => {
+    console.log(error);
+  });
+};
+
+const addHohApi = (tenantId, userId) => {
+  return axios.put(`/users/${tenantId}/${userId}`)
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.log(error);
+    });
+};
+
 
 
 const fetchData = async (userId) => {
@@ -50,28 +68,9 @@ const fetchData = async (userId) => {
   }
 };
 
-const addHousehold = () => {
-  <Link to="/addHouse">Add a Household</Link>
-};
-
-
-const addNewHouseholdApi = (householdData) => {
-  const requestBody = {...householdData}
-
-  return axios.post(`backendUrl/households`, requestBody)
-  .then(response => {
-    return convertFromApi(response.data)
-  })
-  .catch(error => {
-    console.log(error)
-  })
-}
-
-
-
 function App() {
   const [userData, setUserData] = useState([]);
-  const [householdData, setHouseholdData] = useState([])
+  const [householdData, setHouseholdData] = useState([]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -81,44 +80,41 @@ function App() {
     fetchUserData();
   }, []);
 
-  const handleHouseholdSubmit = (data) => {
-    addNewHouseholdApi(data)
-      .then(newHousehold => {
-        setHouseholdData ([...householdData, newHousehold])
+  const handleHouseholdSubmit = async (data) => {
+    await addNewHouseholdApi(data)
+      .then(async newHousehold => {
+        setHouseholdData([...householdData, newHousehold]);
+        const tenantId = userData.tenantId;
+        const userId = Userfront.user["userId"];
+        await addHohApi(tenantId, userId);
+        const updatedUserData = await fetchData(Userfront.user["userId"]);
+        setUserData(updatedUserData);
       })
       .catch(error => console.log(error))
-  }
-
+  };
+  
   return (
     <Router>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/reset">Reset</Link>
-            </li>
-            <li>
-              <Link to="/dashboard">Dashboard</Link>
-            </li>
-          </ul>
-        </nav>
-      <Routes>
+    <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<LoginForm/>}/>
         <Route path='/reset' element={<PasswordResetForm/>}/>
         <Route path='/signup' element={<SignupForm/>}/>
         <Route path='/dashboard' element={
               <RequireAuth>
-                <Dashboard userData={userData} onAddHouseHold={addHousehold}/>
+                <Dashboard userData={userData} />
               </RequireAuth>} />
-        <Route path='/addHouse' element={ <RequireAuth><NewHouseholdForm handleHouseholdSubmit={handleHouseholdSubmit}/></RequireAuth>} />
-      </Routes>
-    </Router>
+        <Route path='/addHouse' element={
+              <RequireAuth>
+                <NewHouseholdForm handleHouseholdSubmit={handleHouseholdSubmit}/>
+              </RequireAuth>} />
+        <Route path='/invite' element={
+          <RequireAuth>
+            <NewInviteForm />
+          </RequireAuth>
+        } />
+    </Routes>
+  </Router>
   )
 }
 
