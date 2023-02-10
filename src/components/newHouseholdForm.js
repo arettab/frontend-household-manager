@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 
 const defaultHouseholdState = {
     household: "",
@@ -7,6 +7,8 @@ const defaultHouseholdState = {
 
 const NewHouseholdForm = ({handleHouseholdSubmit})=> {
     const [formData, setFromData] =useState(defaultHouseholdState)
+
+    const navigate = useNavigate();
 
     const handleChange = (event) =>{
         const fieldValue = event.target.value;
@@ -29,9 +31,7 @@ const NewHouseholdForm = ({handleHouseholdSubmit})=> {
                 <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
             </div>
             <div>
-                <Link to=".." relative="path">
-                <button type="submit" value="Add Household">Start a Household</button>
-                </Link>
+                <button type="submit" value="Add Household" onClick={() => navigate(-1)}>Start a Household</button>
             </div>
         </form>
     )

@@ -1,46 +1,83 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Box, Button, TextField } from "@mui/material";
+import { Formik } from "formik";
+import * as yup from "yup";
+import Header from "../header";
 
-const defaultInviteState = {
-    email: "",
-    }
-
-const NewInviteForm = ({handleInviteSubmit})=> {
-    const [formData, setFromData] =useState(defaultInviteState)
-
-    const handleChange = (event) =>{
-        const fieldValue = event.target.value;
-        const fieldName = event.target.fieldName;
-        const newFormData = {...formData, [fieldName]: fieldValue}
-
-        setFromData(newFormData);
-    }
-
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        handleInviteSubmit(formData);
-        setFromData(defaultInviteState);
-    }
+const NewInviteForm = () => {
+    const handleFormSubmit = (values) => {
+        console.log(values);
+    };
 
     return (
-        <div>
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label htmlFor="email">new member's email</label>
-                <input type="text" id="email" name="email" value={formData.email} onChange={handleChange} />
-            </div>
-            <div>
-                <label htmlFor="name">new member's name</label>
-                <input type="text" id="name" name="name" value={formData.name} onChange={handleChange} />
-            </div>
-            <div><input type="submit" value="Send Invite" /></div>
-        </form>
-        <Link to="/dashboard">
-            <button>Finished</button>
-        </Link> 
-        </div>
+        <Box m="20px">
+        <Header title="Invite Members" subtitle="Invite members to your household" />
 
-    )
-}   
+        <Formik
+            onSubmit={handleFormSubmit}
+            initialValues={initialValues}
+            validationSchema={checkoutSchema}
+        >
+            {({
+            values,
+            errors,
+            touched,
+            handleBlur,
+            handleChange,
+            handleSubmit,
+            }) => (
+            <form onSubmit={handleSubmit}>
+                <Box
+                display="grid"
+                gap="30px"
+                gridTemplateColumns="repeat(4, minmax(0, 1fr))"
+                >
+                <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Name"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.firstName}
+                    name="firstName"
+                    error={!!touched.firstName && !!errors.firstName}
+                    helperText={touched.firstName && errors.firstName}
+                    sx={{ gridColumn: "span 2" }}
+                />
+                <TextField
+                    fullWidth
+                    variant="filled"
+                    type="text"
+                    label="Email"
+                    onBlur={handleBlur}
+                    onChange={handleChange}
+                    value={values.email}
+                    name="email"
+                    error={!!touched.email && !!errors.email}
+                    helperText={touched.email && errors.email}
+                    sx={{ gridColumn: "span " }}
+                />
+                </Box>
+                <Box display="flex" justifyContent="end" mt="20px">
+                <Button type="submit" color="secondary" variant="contained">
+                    Invite new member
+                </Button>
+                </Box>
+            </form>
+            )}
+        </Formik>
+        </Box>
+    );
+    };
 
-export default NewInviteForm;
+    const checkoutSchema = yup.object().shape({
+    name: yup.string().required("required"),
+    email: yup.string().email("invalid email").required("required"),
+    });
+    const initialValues = {
+    name: "",
+    email: "",
+
+    };
+
+    export default NewInviteForm;

@@ -1,8 +1,6 @@
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
-  Link,
   Navigate,
   useLocation,
 } from 'react-router-dom';
@@ -13,7 +11,8 @@ import Dashboard from './components/dashboard';
 import PasswordResetForm from './components/passwordResetForm';
 import Userfront from "@userfront/react";
 import NewHouseholdForm from './components/newHouseholdForm';
-
+import  { CssBaseline, ThemeProvider } from "@mui/material";
+import {ColorModeContext, useMode} from './theme'
 import './App.css';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
@@ -71,6 +70,9 @@ const fetchData = async (userId) => {
 function App() {
   const [userData, setUserData] = useState([]);
   const [householdData, setHouseholdData] = useState([]);
+  const [theme, colorMode] =useMode();
+  const location = useLocation();
+  const background = location.state && location.state.background;
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -94,8 +96,10 @@ function App() {
   };
   
   return (
-    <Router>
-    <Routes>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+    <Routes location={background || location}>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<LoginForm/>}/>
         <Route path='/reset' element={<PasswordResetForm/>}/>
@@ -114,7 +118,21 @@ function App() {
           </RequireAuth>
         } />
     </Routes>
-  </Router>
+    {background && (
+        <Routes>
+          <Route path='/addHouse' element={
+              <RequireAuth>
+                <NewHouseholdForm handleHouseholdSubmit={handleHouseholdSubmit}/>
+              </RequireAuth>} />
+        <Route path='/invite' element={
+          <RequireAuth>
+            <NewInviteForm />
+          </RequireAuth>
+        } />
+        </Routes>
+      )}
+    </ThemeProvider>
+  </ColorModeContext.Provider>
   )
 }
 
