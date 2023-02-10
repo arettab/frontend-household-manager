@@ -6,8 +6,9 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
-import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 import SearchIcon from "@mui/icons-material/Search";
+import Userfront from "@userfront/react";
 
 const Topbar = () => {
     const theme = useTheme();
@@ -44,7 +45,7 @@ const Topbar = () => {
             <SettingsOutlinedIcon />
             </IconButton>
             <IconButton>
-            <PersonOutlinedIcon />
+            <LogoutOutlinedIcon onClick={Userfront.logout}/>
             </IconButton>
         </Box>
         </Box>

@@ -1,5 +1,4 @@
 import Userfront from "@userfront/react";
-import User from "./user";
 import PropTypes from 'prop-types';
 import { Link, Outlet, useLocation } from 'react-router-dom';
 import { IconButton } from "@mui/material";
@@ -26,12 +25,10 @@ const Dashboard = (props) => {
                         </Link>
                         <Outlet />
                     </div>
-                    <button onClick={Userfront.logout}>Logout</button>
                 </div>
             ) : (
                 <div>
                     <h2>Dashboard</h2>
-                    <User name={props.userData.name} />
                     <Link to='/invite'>
                         <button>Invite Household Members</button>
                     </Link>
