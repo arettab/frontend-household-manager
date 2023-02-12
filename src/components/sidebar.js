@@ -105,7 +105,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
                         {props.userData.name}
                     </Typography>
                     <Typography variant="h5" color={colors.greenAccent[500]}>
-                    {props.userData.role}
+                    {props.userData.household}
                     </Typography>
                     </Box>
                 </Box>

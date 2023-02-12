@@ -23,56 +23,72 @@ import NewInviteForm from './components/NewInviteForm';
 
 const backendUrl = 'http://localhost:5000'
 
+
 function RequireAuth({ children }) {
   let location = useLocation();
   if (!Userfront.tokens.accessToken) {
-    // Redirect to the /login page
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
 
   return children;
 }
+// const newUser = {
+//   userId: Userfront.user.userId,
+//   userName: Userfront.user.name,
+//   userPhoneNumber: Userfront.user.phoneNumber,
+//   userEmail: Userfront.user.email
+//   household_id: 
+// }
+
+// const addNewUser = () => {
+//     const requestBody = newUser;
+    
+//     return axios.post(`${backendUrl}/users`, requestBody)
+//       .then(response => {
+//         return response.data;
+//       })
+//       .catch(err => {
+//         console.log(err);
+//         return Promise.reject(err);
+//       });
+//   };
   
 
-const addNewHouseholdApi = (householdData) => {
-  const requestBody = {...householdData};
 
-  return axios.post(`${backendUrl}/households`, requestBody)
-  .then (response => {
-    return response;
-  })
-  .catch(error => {
-    console.log(error);
-  });
-};
-
-const addHohApi = (tenantId, userId) => {
-  return axios.put(`/users/${tenantId}/${userId}`)
-    .then(response => {
-      return response;
-    })
-    .catch(error => {
-      console.log(error);
-    });
-};
-
-
-
-const fetchData = async (userId) => {
-  try {
-    const response = await axios.get(`${backendUrl}/users/${userId}`);
+const getUserfrontData = (userId) => {
+  return axios.get(`${backendUrl}/users/proxy/${userId}`)
+  .then(response => {
     return response.data;
-  } catch (error) {
-    console.error(error);
-  }
+  })
+  .catch(err => {
+    console.log(err)
+  })
 };
+
+// const getUserfromApi = (userId) => {
+//   return axios.get(`${backendUrl}/users/${userId}`)
+
+//   .then(response => {
+//     return response.data;
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
+//   };
+
+  
+  
 
 function App() {
   const [userData, setUserData] = useState([]);
-  const [householdData, setHouseholdData] = useState([]);
   const [theme, colorMode] =useMode();
   const location = useLocation();
   const background = location.state && location.state.background;
+
+  const fetchData =  (userId) => {
+    return getUserfrontData(userId)
+      };
+      
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -82,18 +98,7 @@ function App() {
     fetchUserData();
   }, []);
 
-  const handleHouseholdSubmit = async (data) => {
-    await addNewHouseholdApi(data)
-      .then(async newHousehold => {
-        setHouseholdData([...householdData, newHousehold]);
-        const tenantId = userData.tenantId;
-        const userId = Userfront.user["userId"];
-        await addHohApi(tenantId, userId);
-        const updatedUserData = await fetchData(Userfront.user["userId"]);
-        setUserData(updatedUserData);
-      })
-      .catch(error => console.log(error))
-  };
+
   
   return (
     <ColorModeContext.Provider value={colorMode}>
@@ -110,7 +115,7 @@ function App() {
               </RequireAuth>} />
         <Route path='/addHouse' element={
               <RequireAuth>
-                <NewHouseholdForm handleHouseholdSubmit={handleHouseholdSubmit}/>
+                <NewHouseholdForm />
               </RequireAuth>} />
         <Route path='/invite' element={
           <RequireAuth>
@@ -122,7 +127,7 @@ function App() {
         <Routes>
           <Route path='/addHouse' element={
               <RequireAuth>
-                <NewHouseholdForm handleHouseholdSubmit={handleHouseholdSubmit}/>
+                <NewHouseholdForm />
               </RequireAuth>} />
         <Route path='/invite' element={
           <RequireAuth>

@@ -29,10 +29,6 @@ const Dashboard = (props) => {
             ) : (
                 <div>
                     <h2>Dashboard</h2>
-                    <Link to='/invite'>
-                        <button>Invite Household Members</button>
-                    </Link>
-                    <button onClick={Userfront.logout}>Logout</button>
                 </div>
             )}
         </div>
