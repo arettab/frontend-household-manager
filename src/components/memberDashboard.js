@@ -3,10 +3,13 @@ import { tokens } from "../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../header";
 import EventList from "./eventsList";
+import { useNavigate } from "react-router-dom";
 
 const MemberDashboard = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
+  const navigate = useNavigate();
+  const handleEventClick = () => navigate('/eventForm')
 
   return (
     <Box m="20px">
@@ -22,7 +25,9 @@ const MemberDashboard = () => {
               fontSize: "14px",
               fontWeight: "bold",
               padding: "10px 20px",
+              
             }}
+            onClick={handleEventClick}
           >
             <DownloadOutlinedIcon sx={{ mr: "10px" }} />
             Create Event
