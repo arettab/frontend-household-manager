@@ -6,23 +6,18 @@ import {
 } from 'react-router-dom';
 import Home from './components/home';
 import LoginForm from './components/loginForm';
-import SignupForm from './components/signupForm';
 import Dashboard from './components/dashboard';
 import PasswordResetForm from './components/passwordResetForm';
 import Userfront from "@userfront/react";
-import NewHouseholdForm from './components/newHouseholdForm';
 import  { CssBaseline, ThemeProvider } from "@mui/material";
 import {ColorModeContext, useMode} from './theme'
 import './App.css';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import NewInviteForm from './components/NewInviteForm';
-
-
-
-
-const backendUrl = 'http://localhost:5000'
-
+import Topbar from './components/topbar';
+import Sidebar from './components/sidebar';
+import MemberDashboard from './components/memberDashboard';
+import HohDashboard from './components/hohdashboard';
+import { checkUserExists, getUserfromApi} from './api';
 
 function RequireAuth({ children }) {
   let location = useLocation();
@@ -32,71 +27,28 @@ function RequireAuth({ children }) {
 
   return children;
 }
-// const newUser = {
-//   userId: Userfront.user.userId,
-//   userName: Userfront.user.name,
-//   userPhoneNumber: Userfront.user.phoneNumber,
-//   userEmail: Userfront.user.email
-//   household_id: 
-// }
 
-// const addNewUser = () => {
-//     const requestBody = newUser;
-    
-//     return axios.post(`${backendUrl}/users`, requestBody)
-//       .then(response => {
-//         return response.data;
-//       })
-//       .catch(err => {
-//         console.log(err);
-//         return Promise.reject(err);
-//       });
-//   };
+const userId = Userfront.user.userId  
   
-
-
-const getUserfrontData = (userId) => {
-  return axios.get(`${backendUrl}/users/proxy/${userId}`)
-  .then(response => {
-    return response.data;
-  })
-  .catch(err => {
-    console.log(err)
-  })
-};
-
-// const getUserfromApi = (userId) => {
-//   return axios.get(`${backendUrl}/users/${userId}`)
-
-//   .then(response => {
-//     return response.data;
-//   })
-//   .catch(err => {
-//     console.log(err)
-//   })
-//   };
-
-  
-  
-
 function App() {
   const [userData, setUserData] = useState([]);
   const [theme, colorMode] =useMode();
   const location = useLocation();
   const background = location.state && location.state.background;
 
-  const fetchData =  (userId) => {
-    return getUserfrontData(userId)
-      };
-      
+  const fetchUserData = async () => {
+    const userExist = await checkUserExists(userId);
+    if(userExist){
+      const user = await getUserfromApi(userId);
+      setUserData(user);
+    } else {}
+  }
+
 
   useEffect(() => {
-    const fetchUserData = async () => {
-      const data = await fetchData(Userfront.user["userId"]);
-      setUserData(data);
-    };
     fetchUserData();
   }, []);
+
 
 
   
@@ -104,38 +56,31 @@ function App() {
     <ColorModeContext.Provider value={colorMode}>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-    <Routes location={background || location}>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<LoginForm/>}/>
-        <Route path='/reset' element={<PasswordResetForm/>}/>
-        <Route path='/signup' element={<SignupForm/>}/>
-        <Route path='/dashboard' element={
-              <RequireAuth>
-                <Dashboard userData={userData} />
-              </RequireAuth>} />
-        <Route path='/addHouse' element={
-              <RequireAuth>
-                <NewHouseholdForm />
-              </RequireAuth>} />
-        <Route path='/invite' element={
-          <RequireAuth>
-            <NewInviteForm />
-          </RequireAuth>
-        } />
-    </Routes>
-    {background && (
-        <Routes>
-          <Route path='/addHouse' element={
-              <RequireAuth>
-                <NewHouseholdForm />
-              </RequireAuth>} />
-        <Route path='/invite' element={
-          <RequireAuth>
-            <NewInviteForm />
-          </RequireAuth>
-        } />
-        </Routes>
-      )}
+        <div className="app">
+        <Sidebar userData={userData} />
+          <main className="content">
+            <Topbar />
+            <Routes location={background || location}>
+                <Route path='/' element={<Home/>}/>
+                <Route path='/login' element={<LoginForm/>}/>
+                <Route path='/reset' element={<PasswordResetForm/>}/>
+            </Routes>
+                <Routes>
+                <Route path='/dashboard' element={
+                      <RequireAuth>
+                        <MemberDashboard className="memberDashboard" userData={userData} />
+                      </RequireAuth>} />
+                      <Route path='/member' element={
+                      <RequireAuth>
+                        <HohDashboard className="hohDashboard" userData={userData} />
+                      </RequireAuth>} />
+                      <Route path='/dashboard' element={
+                      <RequireAuth>
+                        <Dashboard className="dashboard" userData={userData} />
+                      </RequireAuth>} />
+                </Routes>
+          </main>
+      </div>
     </ThemeProvider>
   </ColorModeContext.Provider>
   )
