@@ -2,7 +2,6 @@ import { Box, Button, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../header";
-import EventList from "./hohEventsList";
 import { useNavigate } from "react-router-dom";
 import MemberEventList from "./memberEventList";
 

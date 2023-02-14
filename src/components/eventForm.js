@@ -28,13 +28,12 @@ const handleBackClick = () => navigate(-1);
     console.log(values);
   };
 
- const ControlledCheckbox=() => {
-    const [checked, setChecked] = useState(true);
+//  const ControlledCheckbox=() => {
+//     const [checked, setChecked] = useState(true);
   
-    const handleChange = (event) => {
-      setChecked(event.target.checked);
-    };
- };
+//     const handleChange = (event) => {
+//       setChecked(event.target.checked);
+//     };
   return (
     <Box m="20px">
       <Header title="CREATE EVENT" subtitle="Create a new event" />

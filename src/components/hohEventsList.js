@@ -1,18 +1,18 @@
 import { Box } from '@mui/material';
 import { mockData } from '../data';
-import Events from './events';
+import HohEvent from './HohEvents';
 
 
-const EventList = (props) => {
+const HohEventList = () => {
     return (
         <Box display="flex" gap="20px" flexDirection={"column"}>
-            <h3>This Week</h3>
+            <h3>Events</h3>
             {mockData.map ( (event) => {
-                return (<Events {...event} /> )  
+                return (<HohEvent {...event} /> )  
             })
             }
         </Box>
     )
 }
 
-export default EventList
+export default HohEventList

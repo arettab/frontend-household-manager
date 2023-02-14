@@ -17,7 +17,7 @@ import Topbar from './components/topbar';
 import Sidebar from './components/sidebar';
 import MemberDashboard from './components/memberDashboard';
 import HohDashboard from './components/hohdashboard';
-import { addNewUser, checkUserExists, getUserfromApi} from './api';
+import { getUserfromApi} from './api';
 import Signup from './components/signup';
 import EventForm from './components/eventForm';
 
@@ -39,19 +39,14 @@ function App() {
   const background = location.state && location.state.background;
 
   const fetchUserData = async () => {
-    const userExist = await checkUserExists(userId);
-    if(userExist){
-      const user = await getUserfromApi(userId);
+    const user = getUserfromApi(userId);
       setUserData(user);
-    } else {
-      addNewUser(userData)
-    }
   }
 
 
-  useEffect(() => {
+  useEffect((userData) => {
     fetchUserData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    console.log(userData)
   },[]);
 
 
@@ -80,9 +75,9 @@ function App() {
                       <RequireAuth>
                         <HohDashboard className="hohDashboard" userData={userData} />
                       </RequireAuth>} />
-                      <Route path='/dashboard' element={
+                      <Route path='/hoh' element={
                       <RequireAuth>
-                        <Dashboard className="dashboard" userData={userData} />
+                        <Dashboard className="dashboard" userData={Userfront.user} />
                       </RequireAuth>} />
                       <Route path='/eventForm' element={
                       <RequireAuth>
