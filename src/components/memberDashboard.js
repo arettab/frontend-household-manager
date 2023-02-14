@@ -2,8 +2,9 @@ import { Box, Button, useTheme } from "@mui/material";
 import { tokens } from "../theme";
 import DownloadOutlinedIcon from "@mui/icons-material/DownloadOutlined";
 import Header from "../header";
-import EventList from "./eventsList";
+import EventList from "./hohEventsList";
 import { useNavigate } from "react-router-dom";
+import MemberEventList from "./memberEventList";
 
 const MemberDashboard = () => {
   const theme = useTheme();
@@ -56,7 +57,7 @@ const MemberDashboard = () => {
             alignItems="center"
           >
     
-                <EventList />
+                <MemberEventList />
 
           </Box>
         </Box>

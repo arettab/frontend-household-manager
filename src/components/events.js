@@ -15,14 +15,14 @@ const Event = (props) => {
           id="panel1a-header"
           
         >
-         <h3>Title: {props.title}</h3>
-         <h3>Time: {props.datetime}</h3>
+         <h3>{props.title} @ {props.datetime}</h3>
+         
         </AccordionSummary>
         <AccordionDetails>
         <h3>Description: {props.description}</h3>
         <h3>Cost: {props.cost}</h3>
             <h3>transportation: {props.transport}</h3>
-            <h3>location {props.location}</h3>
+            <h3>location: {props.location}</h3>
         </AccordionDetails>
       </Accordion>
       
