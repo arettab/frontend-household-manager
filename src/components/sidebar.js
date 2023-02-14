@@ -10,6 +10,7 @@ import ContactsOutlinedIcon from "@mui/icons-material/ContactsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import Userfront from "@userfront/react";
 
 
 const Item = ({ title, to, icon, selected, setSelected }) => {
@@ -102,7 +103,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
                         fontWeight="bold"
                         sx={{ m: "10px 0 0 0" }}
                     >
-                        {props.userData.name}
+                        {Userfront.user.name}
                     </Typography>
                     <Typography variant="h5" color={colors.greenAccent[500]}>
                     {props.userData.household}

@@ -18,6 +18,7 @@ import Sidebar from './components/sidebar';
 import MemberDashboard from './components/memberDashboard';
 import HohDashboard from './components/hohdashboard';
 import { checkUserExists, getUserfromApi} from './api';
+import Signup from './components/signup';
 
 function RequireAuth({ children }) {
   let location = useLocation();
@@ -64,6 +65,7 @@ function App() {
                 <Route path='/' element={<Home/>}/>
                 <Route path='/login' element={<LoginForm/>}/>
                 <Route path='/reset' element={<PasswordResetForm/>}/>
+                <Route path='/signup' element={<Signup/>}/>
             </Routes>
                 <Routes>
                 <Route path='/dashboard' element={
