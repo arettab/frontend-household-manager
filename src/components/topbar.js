@@ -44,8 +44,8 @@ const Topbar = () => {
             <IconButton>
             <SettingsOutlinedIcon />
             </IconButton>
-            <IconButton>
-            <LogoutOutlinedIcon onClick={Userfront.logout}/>
+            <IconButton onClick={Userfront.logout}>
+            <LogoutOutlinedIcon />
             </IconButton>
         </Box>
         </Box>
